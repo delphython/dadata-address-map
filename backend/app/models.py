@@ -8,7 +8,7 @@ class Addresses(models.Model):
         max_length=250,
         blank=True,
     )
-    address = models.CharField(
+    postal_code = models.CharField(
         "Индекс",
         max_length=6,
         blank=True,
@@ -74,12 +74,14 @@ class Addresses(models.Model):
         blank=True,
     )
 
-    kladr_id = models.IntegerField(
+    kladr_id = models.BigIntegerField(
         "Идентификатор в системе КЛАДР",
     )
 
-    fias_id = models.UUIDField(
+    fias_id = models.CharField(
         "Идентификатор в системе ФИАС",
+        max_length=36,
+        blank=True,
     )
 
     fias_level = models.IntegerField(
@@ -102,8 +104,10 @@ class Addresses(models.Model):
         blank=True,
     )
 
-    tax_office = models.IntegerField(
+    tax_office = models.CharField(
         "Номер налоговой",
+        max_length=10,
+        blank=True,
     )
 
     timezone = models.CharField(
@@ -124,12 +128,16 @@ class Addresses(models.Model):
         decimal_places=6
     )
 
-    population = models.IntegerField(
+    population = models.CharField(
         "Население",
+        max_length=10,
+        blank=True,
     )
 
-    foundation_year = models.IntegerField(
+    foundation_year = models.CharField(
         "Год основания",
+        max_length=20,
+        blank=True,
     )
 
     class Meta:
@@ -137,4 +145,4 @@ class Addresses(models.Model):
         verbose_name_plural = "Адреса"
 
     def __str__(self):
-        return {self.address}
+        return self.address

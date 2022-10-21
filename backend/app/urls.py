@@ -6,6 +6,6 @@ urlpatterns = [
     path(
         "get_address/<str:source>/<int:distance>",
         views.get_dadata_geocode_address,
-        name='get_address',
+        name='showmap',
     ),
 ]

@@ -32,6 +32,9 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 
 ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", ["127.0.0.1", "localhost"])
 
+# Dadata
+DADATA_TOKEN = env.str("DADATA_TOKEN", 'REPLACE_ME')
+DADATA_SECRET = env.str("DADATA_SECRET", 'REPLACE_ME')
 
 # Application definition
 

@@ -120,12 +120,14 @@ class Addresses(models.Model):
         "Широта",
         max_digits=9,
         decimal_places=6,
+        db_index=True,
     )
 
     geo_lon = models.DecimalField(
         "Долгота",
         max_digits=9,
-        decimal_places=6
+        decimal_places=6,
+        db_index=True,
     )
 
     population = models.CharField(

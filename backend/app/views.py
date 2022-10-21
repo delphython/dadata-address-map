@@ -1,11 +1,18 @@
+import folium
+
 from dadata import Dadata
 from django.conf import settings
-from django.http import JsonResponse
 from django.shortcuts import render
 
 from .models import Addresses
 
-# Create your views here.
+
+DEFAULT_IMAGE_URL = (
+    'https://vignette.wikia.nocookie.net/pokemon/images/6/6e/%21.png/revision'
+    '/latest/fixed-aspect-ratio-down/width/240/height/240?cb=20130525215832'
+    '&fill=transparent'
+)
+
 
 def is_point_in_radius(
     point_lat,
@@ -21,6 +28,17 @@ def is_point_in_radius(
     )
 
 
+def add_address(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
+    icon = folium.features.CustomIcon(
+        image_url,
+        icon_size=(50, 50),
+    )
+    folium.Marker(
+        [lat, lon],
+        icon=icon,
+    ).add_to(folium_map)
+
+
 def get_dadata_geocode_address(request, source, distance):
     dadata_token = settings.DADATA_TOKEN
     dadate_secret = settings.DADATA_SECRET
@@ -29,13 +47,13 @@ def get_dadata_geocode_address(request, source, distance):
         dadata_result = dadata.clean(
             name="address", source=source
         )
-    
-    points_to_show = [
-        (
-            dadata_result["geo_lat"],
-            dadata_result["geo_lon"]
-        )
+
+    center_point = [
+        dadata_result["geo_lat"],
+        dadata_result["geo_lon"]
     ]
+    
+    points_to_show = [center_point]
     
     if distance > 0:
         addresses = Addresses.objects.all()
@@ -55,13 +73,13 @@ def get_dadata_geocode_address(request, source, distance):
                     )
                 )
 
-    print(points_to_show)
+    folium_map = folium.Map(location=center_point, zoom_start=12)
+    for point_to_show in points_to_show:
+        add_address(
+            folium_map, point_to_show[0],
+            point_to_show[1]
+        )
 
-    return JsonResponse(
-        dadata_result,
-        safe=False,
-        json_dumps_params={
-            "ensure_ascii": False,
-            "indent": 4,
-        },
-    )
+    return render(request, 'showmap.html', context={
+        'map': folium_map._repr_html_(),
+    })

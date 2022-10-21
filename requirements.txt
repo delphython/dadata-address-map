@@ -1,3 +1,4 @@
+dadata==21.10.1
 Django==4.1.2
 dj-database-url==1.0.0
 environs==9.5.0

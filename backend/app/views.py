@@ -1,5 +1,7 @@
 import folium
 
+from haversine import haversine, Unit
+
 from dadata import Dadata
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -7,13 +9,6 @@ from django.shortcuts import render, redirect
 
 from .models import Addresses
 from .forms import AddGeoForm
-
-
-DEFAULT_IMAGE_URL = (
-    'https://vignette.wikia.nocookie.net/pokemon/images/6/6e/%21.png/revision'
-    '/latest/fixed-aspect-ratio-down/width/240/height/240?cb=20130525215832'
-    '&fill=transparent'
-)
 
 
 def is_point_in_radius(
@@ -24,20 +19,18 @@ def is_point_in_radius(
     radius
 ):
     return (
-        (float(point_lat) - float(zero_point_lat))**2
-        + (float(point_lon) - float(zero_point_lon))**2
-        <= radius**2
+        haversine(
+            (float(point_lat), float(point_lon)),
+            (float(zero_point_lat), float(zero_point_lon)),
+            unit=Unit.KILOMETERS
+        ) <= radius
     )
 
 
-def add_address(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
-    icon = folium.features.CustomIcon(
-        image_url,
-        icon_size=(50, 50),
-    )
+def add_address(folium_map, lat, lon):
     folium.Marker(
         [lat, lon],
-        icon=icon,
+        icon=folium.Icon(color='red',icon='info-sign')
     ).add_to(folium_map)
 
 
@@ -75,7 +68,7 @@ def get_dadata_geocode_address(request, source, distance):
                     )
                 )
 
-    folium_map = folium.Map(location=center_point, zoom_start=12)
+    folium_map = folium.Map(location=center_point, zoom_start=8)
     for point_to_show in points_to_show:
         add_address(
             folium_map, point_to_show[0],
@@ -98,6 +91,9 @@ def mainpage(request):
         if form.is_valid():
             address = form.cleaned_data['address']
             radius = form.cleaned_data['radius']
+
+            if int(radius) < 0:
+                radius = 0
 
             return redirect(
                 f"get_address/{address}/{radius}",

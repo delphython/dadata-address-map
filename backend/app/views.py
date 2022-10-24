@@ -2,9 +2,11 @@ import folium
 
 from dadata import Dadata
 from django.conf import settings
-from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, redirect
 
 from .models import Addresses
+from .forms import AddGeoForm
 
 
 DEFAULT_IMAGE_URL = (
@@ -80,6 +82,33 @@ def get_dadata_geocode_address(request, source, distance):
             point_to_show[1]
         )
 
-    return render(request, 'showmap.html', context={
-        'map': folium_map._repr_html_(),
-    })
+    return render(
+        request,
+        'showmap.html',
+        context={
+            'map': folium_map._repr_html_(),
+        }
+    )
+
+
+@csrf_exempt
+def mainpage(request):
+    if request.method == 'POST':
+        form = AddGeoForm(request.POST)
+        if form.is_valid():
+            address = form.cleaned_data['address']
+            radius = form.cleaned_data['radius']
+
+            return redirect(
+                f"get_address/{address}/{radius}",
+            )
+    else:
+        form = AddGeoForm()
+        return render(
+            request,
+            'mainpage.html',
+            {
+                'title': 'Показать адрес',
+                'form': form
+            },
+        )

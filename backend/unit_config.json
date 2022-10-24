@@ -1,0 +1,41 @@
+{
+    "listeners": {
+        "*:80": {
+            "pass": "routes/app"
+        }
+    },
+
+    "routes": {
+        "app": [
+            {
+                "match": {
+                    "uri": "/static/*"
+                },
+                "action": {
+                    "share": "/"
+                }
+            },
+          {
+            "action": {
+              "share": "/var/www$uri"
+            }
+          },
+          {
+                "action": {
+                    "pass": "applications/app"
+                }
+            }
+        ]
+    },
+    "applications":{
+       "app": {
+          "type":"python 3.10",
+          "processes": 5,
+          "path":"/app/",
+          "module":"config.wsgi",
+          "environment": {
+            "DJANGO_SETTINGS_MODULE": "config.settings"
+            }
+    }
+ }
+}

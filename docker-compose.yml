@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:14.3
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    user: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  backend:
+    build: backend
+    container_name: 'backend'
+    depends_on:
+      - db
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_DEBUG=${DJANGO_DEBUG}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      - POSTGRES_URL=postgres://postgres:postgres@db:5432/postgres
+    ports:
+      - "81:80"
+    volumes:
+      - ./backend:/app
+  
+volumes:
+  postgres-data:

@@ -8,4 +8,7 @@ urlpatterns = [
         views.get_dadata_geocode_address,
         name='showmap',
     ),
+    path(
+        "", views.mainpage, name="mainpage"
+    ),
 ]

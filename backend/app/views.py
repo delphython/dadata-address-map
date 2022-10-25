@@ -1,14 +1,12 @@
 import folium
-
-from haversine import haversine, Unit
-
 from dadata import Dadata
 from django.conf import settings
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, redirect
+from haversine import Unit, haversine
 
-from .models import Addresses
 from .forms import AddGeoForm
+from .models import Addresses
 
 
 def is_point_in_radius(
@@ -40,16 +38,16 @@ def get_dadata_geocode_address(request, source, distance):
 
     with Dadata(dadata_token, dadate_secret) as dadata:
         dadata_result = dadata.clean(
-            name="address", source=source
+            name='address', source=source
         )
 
     center_point = [
-        dadata_result["geo_lat"],
-        dadata_result["geo_lon"]
+        dadata_result['geo_lat'],
+        dadata_result['geo_lon']
     ]
-    
+
     points_to_show = [center_point]
-    
+
     if distance > 0:
         addresses = Addresses.objects.all()
 
@@ -57,8 +55,8 @@ def get_dadata_geocode_address(request, source, distance):
             if is_point_in_radius(
                 address.geo_lat,
                 address.geo_lon,
-                dadata_result["geo_lat"],
-                dadata_result["geo_lon"],
+                dadata_result['geo_lat'],
+                dadata_result['geo_lon'],
                 distance
             ):
                 points_to_show.append(
@@ -96,7 +94,7 @@ def mainpage(request):
                 radius = 0
 
             return redirect(
-                f"get_address/{address}/{radius}",
+                f'get_address/{address}/{radius}',
             )
     else:
         form = AddGeoForm()

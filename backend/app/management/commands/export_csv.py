@@ -1,11 +1,7 @@
 import csv
 
-from django.core.management.base import BaseCommand
-
 from app.models import Addresses
-
-def export_addresses_from_csv(csv_file):
-    pass
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -19,10 +15,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         csv_file_path = options['cvs_file_path']
 
-        with open(csv_file_path, 'r', encoding = "UTF8", newline='') as csvfile:
+        with open(csv_file_path, 'r', encoding = 'UTF8', newline='') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             header = next(reader)
-            
+
             for row in reader:
                 _object_dict = {key: value for key, value in zip(header, row)}
                 Addresses.objects.get_or_create(**_object_dict)

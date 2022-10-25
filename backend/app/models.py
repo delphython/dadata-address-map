@@ -4,147 +4,147 @@ from django.db import models
 
 class Addresses(models.Model):
     address = models.CharField(
-        "Адрес",
+        'Адрес',
         max_length=250,
         blank=True,
     )
     postal_code = models.CharField(
-        "Индекс",
+        'Индекс',
         max_length=6,
         blank=True,
     )
 
     country = models.CharField(
-        "Страна",
+        'Страна',
         max_length=50,
         blank=True,
     )
 
     federal_district = models.CharField(
-        "Федеральный округ",
+        'Федеральный округ',
         max_length=50,
         blank=True,
     )
 
     region_type = models.CharField(
-        "Тип региона",
+        'Тип региона',
         max_length=10,
         blank=True,
     )
 
     region = models.CharField(
-        "Регион",
+        'Регион',
         max_length=100,
         blank=True,
     )
 
     area_type = models.CharField(
-        "Тип местности",
+        'Тип местности',
         max_length=5,
         blank=True,
     )
 
     area = models.CharField(
-        "Местность",
+        'Местность',
         max_length=100,
         blank=True,
     )
 
     city_type = models.CharField(
-        "Тип города",
+        'Тип города',
         max_length=10,
         blank=True,
     )
 
     city = models.CharField(
-        "Город",
+        'Город',
         max_length=100,
         blank=True,
     )
-    
+
     settlement_type = models.CharField(
-        "Тип поселка",
+        'Тип поселка',
         max_length=10,
         blank=True,
     )
 
     settlement = models.CharField(
-        "Поселок",
+        'Поселок',
         max_length=100,
         blank=True,
     )
 
     kladr_id = models.BigIntegerField(
-        "Идентификатор в системе КЛАДР",
+        'Идентификатор в системе КЛАДР',
     )
 
     fias_id = models.CharField(
-        "Идентификатор в системе ФИАС",
+        'Идентификатор в системе ФИАС',
         max_length=36,
         blank=True,
     )
 
     fias_level = models.IntegerField(
-        "Уровень в системе ФИАС",
+        'Уровень в системе ФИАС',
     )
 
     capital_marker = models.IntegerField(
-        "Метка столицы",
+        'Метка столицы',
     )
-    
+
     okato = models.CharField(
-        "ОКАТО",
+        'ОКАТО',
         max_length=11,
         blank=True,
     )
 
     oktmo = models.CharField(
-        "ОКТМО",
+        'ОКТМО',
         max_length=11,
         blank=True,
     )
 
     tax_office = models.CharField(
-        "Номер налоговой",
+        'Номер налоговой',
         max_length=10,
         blank=True,
     )
 
     timezone = models.CharField(
-        "Часовой пояс",
+        'Часовой пояс',
         max_length=6,
         blank=True,
     )
 
     geo_lat = models.DecimalField(
-        "Широта",
+        'Широта',
         max_digits=9,
         decimal_places=6,
         db_index=True,
     )
 
     geo_lon = models.DecimalField(
-        "Долгота",
+        'Долгота',
         max_digits=9,
         decimal_places=6,
         db_index=True,
     )
 
     population = models.CharField(
-        "Население",
+        'Население',
         max_length=10,
         blank=True,
     )
 
     foundation_year = models.CharField(
-        "Год основания",
+        'Год основания',
         max_length=20,
         blank=True,
     )
 
     class Meta:
-        verbose_name = "Адрес"
-        verbose_name_plural = "Адреса"
+        verbose_name = 'Адрес'
+        verbose_name_plural = 'Адреса'
 
     def __str__(self):
         return self.address

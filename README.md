@@ -40,7 +40,7 @@ docker-compose exec backend ./manage.py export_csv city.scv
 
 **6. Launch the site**
 
-[http://127.0.0.1:8000](http://127.0.0.1:8000)
+[http://127.0.0.1:81](http://127.0.0.1:81)
 
 
 ## Install and launch in local environment
@@ -83,7 +83,7 @@ python manage.py export_csv city.scv
 
 **6. Launch the site**
 
-[http://127.0.0.1:81](http://127.0.0.1:81)
+[http://127.0.0.1:8000](http://127.0.0.1:8000)
 
 
 ## Environment variables
